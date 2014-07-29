@@ -10,7 +10,9 @@ public class QuestionFinder {
 			seek = index;
 			seek = article_new.indexOf("'''", seek);
 		}
-		//loop back through chars to find full stop, cater for '/n's
+		//TODO: loop back through chars to find full stop, cater for '/n's
+		//TODO: find conjugation of 'to be'
+		//TODO: return subject, object (not null!)
 		return null;
 		
 	}
