@@ -1,7 +1,7 @@
 package wikiParse;
 
 public class QuestionFinder {
-	public String[] questionParse(String article, int question){
+	public String[] sentenceParse(String article){
 		//begin wiki parsing
 		String article_new = article.replaceAll("\n", "");
 		String article_newer = article_new.replace("\n*", "");
@@ -78,9 +78,23 @@ public class QuestionFinder {
 		
 		int noteindex = article_finale.indexOf("==Rel");
 		String wiki = article_finale.substring(noteindex);
+		String wiki_final = wiki.replaceAll("\u2013", "-");
+		return null;
 		
 		//end wiki parsing
 		
+		
+	}
+	
+	public String[] questionParse(String[] article, int question){
+		int x = 0;
+		while (x != 1){
+			
+		}
+		
+		return article;
+		
+		/*
 		int index = 0;
 		int seek = 0;
 		for (int i = 0; i<question+1; i++){
@@ -103,6 +117,6 @@ public class QuestionFinder {
 		//TODO: find conjugation of 'to be'
 		//TODO: return subject, object (not null!)
 		return null;
-		
+		*/
 	}
 }
