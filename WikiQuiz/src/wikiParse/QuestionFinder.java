@@ -5,6 +5,12 @@ public class QuestionFinder {
 		String article_new = article.replaceAll("\n", "");
 		//.toLowerCase();
 		
+		if (article_new.indexOf("[[F") != -1){
+			int photoindex = article_new.indexOf("[[F");
+			int photoend = article_new.indexOf("]]");
+			
+		}
+		
 		int index = 0;
 		int seek = 0;
 		for (int i = 0; i<question+1; i++){
