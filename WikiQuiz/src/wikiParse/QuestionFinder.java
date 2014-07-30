@@ -1,5 +1,13 @@
 package wikiParse;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import opennlp.tools.sentdetect.SentenceDetectorME;
+import opennlp.tools.sentdetect.SentenceModel;
+
 public class QuestionFinder {
 	public String[] sentenceParse(String article){
 		//begin wiki parsing
@@ -79,7 +87,34 @@ public class QuestionFinder {
 		int noteindex = article_finale.indexOf("==Rel");
 		String wiki = article_finale.substring(noteindex);
 		String wiki_final = wiki.replaceAll("\u2013", "-");
-		return null;
+		
+		InputStream modelIn = null;
+		try {
+			modelIn = new FileInputStream("en-sent.bin");
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		SentenceModel model = null;
+		try {
+		  model = new SentenceModel(modelIn);
+		}
+		catch (IOException e) {
+		  e.printStackTrace();
+		}
+		finally {
+		  if (modelIn != null) {
+		    try {
+		      modelIn.close();
+		    }
+		    catch (IOException e) {
+		    }
+		  }
+		}
+		
+		SentenceDetectorME sentenceDetector = new SentenceDetectorME(model);
+		String[] sentences = sentenceDetector.sentDetect(wiki_final);
+		return sentences;
 		
 		//end wiki parsing
 		
