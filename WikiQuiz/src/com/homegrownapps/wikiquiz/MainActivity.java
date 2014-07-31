@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
 				pdz.dismiss();
 			}
 			TextView tv = (TextView)findViewById(R.id.textView2);
-			tv.setText(result+'?');
+			tv.setText(result);
 			tv.invalidate();
 		}		
 	}
