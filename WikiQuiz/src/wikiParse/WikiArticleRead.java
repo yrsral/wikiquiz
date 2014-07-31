@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -26,13 +28,14 @@ public class WikiArticleRead {
 	public JSONObject getJSONFromUrl(String url) {
 		 
         // Making HTTP get request
+		HttpEntity httpEntity;
         try {
             // defaultHttpClient
             DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpGet httpGet = new HttpGet(url);
  
             HttpResponse httpResponse = httpClient.execute(httpGet);
-            HttpEntity httpEntity = httpResponse.getEntity();
+            httpEntity = httpResponse.getEntity();
             is = httpEntity.getContent();
  
         } catch (UnsupportedEncodingException e) {
@@ -45,6 +48,7 @@ public class WikiArticleRead {
  
         try {
         	//parsing to string
+        	//String json = IOUtils.toString(is, "iso-8859-1");
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     is, "iso-8859-1"), 8);
             StringBuilder sb = new StringBuilder();

@@ -3,5 +3,6 @@
 
     <string name="app_name">WIkiQuiz</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_text">TextActivity</string>
 
 </resources>

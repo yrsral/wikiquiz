@@ -25,82 +25,79 @@ import opennlp.tools.sentdetect.SentenceModel;
 public class QuestionFinder {
 	public String[] sentenceParse(String article){
 		//begin wiki parsing
-		String article_new = article.replaceAll("\n", "");
-		String article_newer = article_new.replace("\n*", "");
+		String article_new = article;
+		StringBuffer article_newer = new StringBuffer(article_new.replace("\n*", ""));
+		article_new = null;
 		//.toLowerCase();
-		String article_updated;
 		while (true){
-		if (article_newer.indexOf("[[F") != -1){
-			int photoindex = article_newer.indexOf("[[F");
-			int photoend = article_newer.indexOf("]]");
+		//removing [[File: for representing photos
+		if (article_newer.indexOf("[[File") != -1){
+			int photoindex = article_newer.indexOf("[[File");
+			int photoend = article_newer.indexOf("]]", photoindex);
 			int str_len = article_newer.length()-1;
-			article_updated = article_newer.substring(0, photoindex)+article_newer.substring(photoend+2);
-			article_newer = article_updated;
+			Log.i(Integer.toString(photoindex), Integer.toString(photoend));
+			article_newer.delete(photoindex, photoend);
 			
 			
 		} else {
-			article_updated = article_newer;
 			break;
 		}
 		}
 		
-		String article_update;
 		int photoend;
 		while (true){
-			if (article_updated.indexOf("<") != -1){
-				int photoindex = article_updated.indexOf("<");
-				if (article_updated.indexOf("<ref>")==photoindex || article_updated.charAt(article_updated.indexOf(">")-1) != '/'){
-					photoend = article_updated.indexOf("</ref>")+6;
+			if (article_newer.indexOf("<") != -1){
+				int photoindex = article_newer.indexOf("<");
+				if (article_newer.indexOf("<ref>")==photoindex || article_newer.charAt(article_newer.indexOf(">")-1) != '/'){
+					photoend = article_newer.indexOf("</ref>")+6;
 				} else {
-					photoend = article_updated.indexOf(">");
-					int str_len = article_updated.length()-1;
+					photoend = article_newer.indexOf(">");
+					int str_len = article_newer.length()-1;
 				}
-				article_update = article_updated.substring(0, photoindex)+article_updated.substring(photoend+1);
-				article_updated = article_update;
+				article_newer.delete(photoindex, photoend+6);
 				
 				
 			} else {
 				break;
 			}
 		}
-		String wikinoopenbrackets = article_updated.replaceAll("[[", "");
-		String wikinobrackets = wikinoopenbrackets.replaceAll("]]", "");
+		String wikinoopenbrackets = article_newer.toString().replaceAll("\\[\\[", "");
+		article_newer = null;
+		String wikinobrackets = wikinoopenbrackets.replaceAll("\\]\\]", "");
+		wikinoopenbrackets = null;
+		StringBuffer article_newest = new StringBuffer(wikinobrackets);
 		
 		String article_final;
 		while (true){
-		if (wikinobrackets.indexOf("{{") != -1){
-			int noteindex = wikinobrackets.indexOf("{{");
-			int noteend = wikinobrackets.indexOf("}}");
-			int str_len = wikinobrackets.length()-1;
-			article_final = wikinobrackets.substring(0, noteindex)+wikinobrackets.substring(noteend+2);
-			wikinobrackets = article_final;
-			
-			
+		if (article_newest.indexOf("{{") != -1){
+			int noteindex = article_newest.indexOf("{{");
+			int noteend = article_newest.indexOf("}}", noteindex);
+			int str_len = article_newest.length()-1;
+			article_newest.delete(noteindex, noteend+2);
 		} else {
-			article_final = wikinobrackets;
 			break;
 		}
 		}
 		
-		String article_finale;
 		while (true){
-		if (article_final.indexOf("== ") != -1){
-			int noteindex = article_final.indexOf("==");
-			int noteend = article_final.indexOf("==", noteindex);
-			int str_len = article_final.length()-1;
-			article_finale = article_final.substring(0, noteindex)+article_final.substring(noteend+2);
-			article_final = article_finale;
-			
-			
+		if (article_newest.indexOf("== ") != -1){
+			int noteindex = article_newest.indexOf("==");
+			int noteend = article_newest.indexOf("==", noteindex);
+			int str_len = article_newest.length()-1;
+			article_newest.delete(noteindex, noteend+2);
 		} else {
-			article_finale = article_final;
 			break;
 		}
 		}
 		
-		int noteindex = article_finale.indexOf("==Rel");
-		String wiki = article_finale.substring(noteindex);
+		int noteindex = article_newest.indexOf("==Rel");
+		if (noteindex != -1){
+			article_newest.delete(noteindex, article_newest.length()+1);
+		}
+		String wiki = article_newest.toString();
 		String wiki_final = wiki.replaceAll("\u2013", "-");
+		
+		wiki = null;
 		
 		InputStream modelIn = null;
 		try {
@@ -128,6 +125,7 @@ public class QuestionFinder {
 		
 		SentenceDetectorME sentenceDetector = new SentenceDetectorME(model);
 		String[] sentences = sentenceDetector.sentDetect(wiki_final);
+		wiki_final = null;
 		return sentences;
 		
 		//end wiki parsing
@@ -231,13 +229,15 @@ public class QuestionFinder {
 		String substring = null;
 		String objstring = null;
 		String verbstring = null;
+		String tense = null;
 		try {
 			subject = fullsentence.getJSONObject("subject");
 			object = fullsentence.getJSONObject("object");
-			verb = fullsentence.getJSONObject("verb");
+			verb = fullsentence.getJSONObject("action");
 			substring = subject.getString("text");
 			objstring = object.getString("text");
 			verbstring = verb.getString("text");
+			tense = verb.getJSONObject("verb").getString("tense"); 
 			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -248,7 +248,7 @@ public class QuestionFinder {
 		String obj = parseForBrackets(objstring);
 		String ver = parseForBrackets(verbstring);
 		
-		String[] questionfinal = {sub, ver, obj};
+		String[] questionfinal = {sub, ver, tense, obj};
 		return questionfinal;
 		
 		/*
@@ -282,7 +282,7 @@ public class QuestionFinder {
 		while (true){
 			if (sentence.indexOf("(") != -1){
 				int photoindex = sentence.indexOf("(");
-				int photoend = sentence.indexOf(")");
+				int photoend = sentence.indexOf(")", photoindex);
 				int str_len = sentence.length()-1;
 				sentenceUpdated = sentence.substring(0, photoindex)+sentence.substring(photoend+1);
 				sentence = sentenceUpdated;
