@@ -18,6 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.res.AssetManager;
+import android.provider.Settings.Global;
 import android.util.Log;
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
@@ -35,8 +37,12 @@ public class QuestionFinder {
 			int photoindex = article_newer.indexOf("[[File");
 			int photoend = article_newer.indexOf("]]", photoindex);
 			int str_len = article_newer.length()-1;
-			Log.i(Integer.toString(photoindex), Integer.toString(photoend));
-			article_newer.delete(photoindex, photoend);
+			if (photoindex == -1 | photoend == -1){
+				break;
+			} else {
+				Log.i(Integer.toString(photoindex), Integer.toString(photoend));
+				article_newer.delete(photoindex, photoend+2);
+			}
 			
 			
 		} else {
@@ -101,10 +107,13 @@ public class QuestionFinder {
 		
 		InputStream modelIn = null;
 		try {
-			modelIn = new FileInputStream("en-sent.bin");
+			modelIn = com.homegrownapps.wikiquiz.MainActivity.Global.context.getAssets().open("en_sent.bin");
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		SentenceModel model = null;
 		try {
@@ -164,7 +173,7 @@ public class QuestionFinder {
             StringBuilder sb = new StringBuilder();
             String line = null;
             while ((line = reader.readLine()) != null) {
-                sb.append(line + "n");
+                sb.append(line);
             }
             is.close();
             json = sb.toString();
@@ -203,7 +212,7 @@ public class QuestionFinder {
 		//urlencode(query, "utf-8")
 		JSONObject subobj = null;
 		try {
-			subobj = getJSONFromUrl("http://access.alchemyapi.com/calls/text/TextGetRelations?text="+URLEncoder.encode(sentence_noquotes, "UTF-8")+"&apikey=aec6c18db45c37f30dccd808020f969731a4421c&entities=1&keywords=1&optionMode=json");
+			subobj = getJSONFromUrl("http://access.alchemyapi.com/calls/text/TextGetRelations?text="+URLEncoder.encode(sentence_noquotes, "UTF-8")+"&apikey=aec6c18db45c37f30dccd808020f969731a4421c&entities=1&keywords=1&outputMode=json");
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

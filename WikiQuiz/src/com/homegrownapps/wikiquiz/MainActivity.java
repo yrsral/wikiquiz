@@ -18,6 +18,7 @@ public class MainActivity extends Activity {
 	
 	public static class Global {
 		public static String topic;
+		public static Context context;
 	}
 	
 	private ProgressDialog pdz;
@@ -63,6 +64,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		cont = MainActivity.this;
+		Global.context = cont;
 		setContentView(R.layout.activity_main);
 		Intent intent = getIntent();
 		Global.topic = intent.getStringExtra(TextActivity.EXTRA_MESSAGE);
