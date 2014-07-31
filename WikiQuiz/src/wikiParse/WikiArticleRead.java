@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Iterator;
 
 import org.apache.commons.io.IOUtils;
@@ -80,11 +81,18 @@ public class WikiArticleRead {
 		//parse json with wiki name
 		String lang = "en";
 		String key = "";
+		String redircheck = "";
 		String article = "";
 		if (simple == true){
 			lang = "simple";
 		}
-		JSONObject wikiData = getJSONFromUrl("http://"+lang+".wikipedia.org/w/api.php?format=json&action=query&titles="+name+"&prop=revisions&rvprop=content");
+		JSONObject wikiData = null;
+		try {
+			wikiData = getJSONFromUrl("http://"+lang+".wikipedia.org/w/api.php?format=json&action=query&titles="+URLEncoder.encode(name, "UTF-8")+"&prop=revisions&rvprop=content");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		try {
 			//going through the JSON
 			JSONObject page = (wikiData.getJSONObject("query")).getJSONObject("pages");
@@ -92,7 +100,16 @@ public class WikiArticleRead {
 			if (keys.hasNext() == true){
 				key = keys.next();
 			}
-			article = (page.getJSONObject(key)).getJSONArray("revisions").getJSONObject(0).getString("*");
+			redircheck = (page.getJSONObject(key)).getJSONArray("revisions").getJSONObject(0).getString("*");
+			if (redircheck.contains("#REDIRECT")){
+				int startOfBrackets = redircheck.indexOf("[[")+2;
+				int endOfBrackets = redircheck.indexOf("]]");
+				String redirect = redircheck.substring(startOfBrackets, endOfBrackets);
+				article = wikiDownload(redirect, true);
+			} else {
+				article = redircheck;
+			}
+			return article;
 			
 		} catch (JSONException e) {
 			// if there is no article
@@ -100,7 +117,6 @@ public class WikiArticleRead {
 			return "none";
 		}
 		
-		return article;
 		
 	}
 }

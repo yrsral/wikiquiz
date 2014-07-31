@@ -102,7 +102,7 @@ public class QuestionFinder {
 		}
 		String wiki = article_newest.toString();
 		String wiki_final = wiki.replaceAll("\u2013", "-");
-		
+		Log.i("wiki", wiki_final);
 		wiki = null;
 		
 		InputStream modelIn = null;
@@ -198,15 +198,16 @@ public class QuestionFinder {
 	public String[] questionParse(String[] article, int question){
 		int x = 0;
 		int i = 0;
-		while (x != 1){
-			if (article[i].contains("'''") == true){
-				x = 1;
-			} else {
-				i = i+1;
-			}
-		}
+		//while (x != question){
+		//	if (x != 0){
+		//		i = i+1;
+		//	}
+		//	if (article[i].contains("'''") == true){
+		//		x = x+1;
+		//	}
+		//}
 		
-		String sentence_noquotes = article[i].replaceAll("'''", "");
+		String sentence_noquotes = article[question-1].replaceAll("'''", "");
 		
 		//aec6c18db45c37f30dccd808020f969731a4421c
 		//urlencode(query, "utf-8")
@@ -224,6 +225,9 @@ public class QuestionFinder {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		if (relations.length() == 0){
+			return questionParse(article, question+1);
 		}
 		JSONObject fullsentence = null;
 		try {

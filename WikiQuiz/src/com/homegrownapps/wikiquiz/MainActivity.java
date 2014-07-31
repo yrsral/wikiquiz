@@ -41,12 +41,16 @@ public class MainActivity extends Activity {
 			// TODO Auto-generated method stub
 			WikiArticleRead reader = new WikiArticleRead();
 			String unparsed = reader.wikiDownload(Global.topic, true);
-			QuestionFinder qf = new QuestionFinder();
-			String[] parsed = qf.sentenceParse(unparsed);
-			String[] subobjverb = qf.questionParse(parsed, 1);
-			QuestionCreator qc = new QuestionCreator();
-			String question = qc.questionMake(subobjverb[0], subobjverb[1], subobjverb[2]);
-			return question;
+			if (unparsed != "none"){
+				QuestionFinder qf = new QuestionFinder();
+				String[] parsed = qf.sentenceParse(unparsed);
+				String[] subobjverb = qf.questionParse(parsed, 1);
+				QuestionCreator qc = new QuestionCreator();
+				String question = qc.questionMake(subobjverb[0], subobjverb[1], subobjverb[2]);
+				return question;
+			} else {
+				return "No articles about the topic";
+			}
 		}
 		
 		@Override
