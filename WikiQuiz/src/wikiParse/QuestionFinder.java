@@ -14,6 +14,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -202,17 +203,53 @@ public class QuestionFinder {
 		
 		//aec6c18db45c37f30dccd808020f969731a4421c
 		//urlencode(query, "utf-8")
-		JSONObject subobj;
+		JSONObject subobj = null;
 		try {
-			subobj = getJSONFromUrl("http://access.alchemyapi.com/calls/text/TextGetRelations?text="+URLEncoder.encode(sentence_noquotes, "UTF-8")+"&apikey=aec6c18db45c37f30dccd808020f969731a4421c&entities=1&keywords=1");
+			subobj = getJSONFromUrl("http://access.alchemyapi.com/calls/text/TextGetRelations?text="+URLEncoder.encode(sentence_noquotes, "UTF-8")+"&apikey=aec6c18db45c37f30dccd808020f969731a4421c&entities=1&keywords=1&optionMode=json");
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		//parse the json and input into question maker
+		JSONArray relations = null;
+		try {
+			relations = subobj.getJSONArray("relations");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JSONObject fullsentence = null;
+		try {
+			fullsentence = relations.getJSONObject(0);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JSONObject subject = null;
+		JSONObject object = null;
+		JSONObject verb = null;
+		String substring = null;
+		String objstring = null;
+		String verbstring = null;
+		try {
+			subject = fullsentence.getJSONObject("subject");
+			object = fullsentence.getJSONObject("object");
+			verb = fullsentence.getJSONObject("verb");
+			substring = subject.getString("text");
+			objstring = object.getString("text");
+			verbstring = verb.getString("text");
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		return article;
+		String sub = parseForBrackets(substring);
+		String obj = parseForBrackets(objstring);
+		String ver = parseForBrackets(verbstring);
+		
+		String[] questionfinal = {sub, ver, obj};
+		return questionfinal;
 		
 		/*
 		int index = 0;
@@ -238,5 +275,25 @@ public class QuestionFinder {
 		//TODO: return subject, object (not null!)
 		return null;
 		*/
+	}
+	
+	public String parseForBrackets(String sentence){
+		String sentenceUpdated;
+		while (true){
+			if (sentence.indexOf("(") != -1){
+				int photoindex = sentence.indexOf("(");
+				int photoend = sentence.indexOf(")");
+				int str_len = sentence.length()-1;
+				sentenceUpdated = sentence.substring(0, photoindex)+sentence.substring(photoend+1);
+				sentence = sentenceUpdated;
+				//article_newer = article_updated;
+				
+				
+			} else {
+				sentenceUpdated = sentence;
+				break;
+			}
+		}
+		return sentenceUpdated;
 	}
 }
