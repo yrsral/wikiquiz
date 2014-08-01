@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
 		protected String doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			WikiArticleRead reader = new WikiArticleRead();
-			String unparsed = reader.wikiDownload(Global.topic, true);
+			String unparsed = reader.wikiDownload(Global.topic, "simple");
 			if (unparsed != "none"){
 				QuestionFinder qf = new QuestionFinder();
 				String[] parsed = qf.sentenceParse(unparsed);
