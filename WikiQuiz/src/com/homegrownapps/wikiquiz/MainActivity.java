@@ -17,11 +17,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+// TODO: Parse for wikt:| in used links
+
 public class MainActivity extends Activity {
 	
 	public static class Global {
 		public static String topic;
 		public static Context context;
+		public static int button;
 	}
 	
 	private ProgressDialog pdz;
@@ -70,6 +73,7 @@ public class MainActivity extends Activity {
 			Random r = new Random();
 			int randButton = r.nextInt(2);
 			//parse till punctuation mark
+			Global.button = randButton;
 			if (result[1] != "none"){
 				if (randButton == 0){
 					Button b = (Button)findViewById(R.id.button1);
@@ -100,15 +104,23 @@ public class MainActivity extends Activity {
 		wp.execute();
 	}
 	
+	// get ticks and crosses
+	
 	public void onClickA(View v){
-		
+		if (Global.button == 0){
+			
+		}
 	}
 	
 	public void onClickB(View v){
-		
+		if (Global.button == 1){
+			
+		}
 	}
 	
 	public void onClickC(View v){
-		
+		if (Global.button == 2){
+			
+		}
 	}
 }

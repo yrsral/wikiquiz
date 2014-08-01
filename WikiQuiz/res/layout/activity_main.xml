@@ -12,9 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="[WQ Logo]"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="50sp" />
+        android:textColor="#FFFFFF"
+        android:textSize="80sp" />
 
     <Button
         android:id="@+id/button2"
@@ -23,7 +23,8 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:onClick="onClickB"
-        android:text="Answer B" />
+        android:text="Answer B"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/button3"
@@ -32,7 +33,8 @@
         android:layout_below="@+id/button2"
         android:layout_centerHorizontal="true"
         android:onClick="onClickC"
-        android:text="Answer C" />
+        android:text="Answer C"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/button1"
@@ -41,7 +43,8 @@
         android:layout_above="@+id/button2"
         android:layout_centerHorizontal="true"
         android:onClick="onClickA"
-        android:text="Answer A" />
+        android:text="Answer A"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/textView2"
@@ -50,6 +53,16 @@
         android:layout_above="@+id/button1"
         android:layout_centerHorizontal="true"
         android:text="Question"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#FFFFFF" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_launcher" />
 
 </RelativeLayout>

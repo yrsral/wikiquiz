@@ -213,7 +213,7 @@ public class QuestionFinder {
 		//urlencode(query, "utf-8")
 		JSONObject subobj = null;
 		try {
-			subobj = getJSONFromUrl("http://access.alchemyapi.com/calls/text/TextGetRelations?text="+URLEncoder.encode(sentence_noquotes, "UTF-8")+"&apikey="+apiKey"+&entities=1&keywords=1&outputMode=json");
+			subobj = getJSONFromUrl("http://access.alchemyapi.com/calls/text/TextGetRelations?text="+URLEncoder.encode(sentence_noquotes, "UTF-8")+"&apikey="+apiKey+"&entities=1&keywords=1&outputMode=json");
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
