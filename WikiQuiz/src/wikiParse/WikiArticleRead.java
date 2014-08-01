@@ -40,7 +40,7 @@ public class WikiArticleRead {
 	 */
 	public void printError(String error, String desc) {
 		//System.out.println("Error: " + error + " - " + desc);
-		printError(error, desc);
+		Log.e(error, desc);
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class WikiArticleRead {
 	 */
 	public void printInfo(String info, String desc) {
 		//System.out.println("Info: " + info + " - " + desc);
-		printInfo(info, desc);
+		Log.i(info, desc);
 	}
 	
 	public JSONObject getJSONFromUrl(String url) {
