@@ -76,12 +76,16 @@ public class MainActivity extends Activity {
 				Global.question = Global.question + 1;
 				//possibly random numbers for question number argument in questionParse
 				//uncapitalise 'a' or 'an'
+				if (subobjverb[0] == "none"){
+					String[] error = {"No questions can be made about the topic", "none"};
+					return error;
+				}
 				QuestionCreator qc = new QuestionCreator();
 				String question = qc.questionMake(subobjverb[0], subobjverb[1], subobjverb[2]);
 				String[] qa = {question, subobjverb[3], obj1[3], obj2[3]};
 				return qa;
 			} else {
-				String[] error = {"No articles about the topic", "none"};
+				String[] error = {"No questions can be made about the topic", "none"};
 				return error;
 			}
 		}
@@ -112,30 +116,30 @@ public class MainActivity extends Activity {
 					b.invalidate();
 					Button bu = (Button)findViewById(R.id.button2);
 					b.setText(result[2]);
-					b.invalidate();
+					bu.invalidate();
 					Button but = (Button)findViewById(R.id.button3);
 					b.setText(result[3]);
-					b.invalidate();
+					but.invalidate();
 				} else if (randButton == 1){
 					Button b = (Button)findViewById(R.id.button2);
 					b.setText(result[1]);
 					b.invalidate();
 					Button bu = (Button)findViewById(R.id.button1);
 					b.setText(result[2]);
-					b.invalidate();
+					bu.invalidate();
 					Button but = (Button)findViewById(R.id.button3);
 					b.setText(result[3]);
-					b.invalidate();
+					but.invalidate();
 				} else if (randButton == 2){
 					Button b = (Button)findViewById(R.id.button3);
 					b.setText(result[1]);
 					b.invalidate();
 					Button bu = (Button)findViewById(R.id.button2);
 					b.setText(result[2]);
-					b.invalidate();
+					bu.invalidate();
 					Button but = (Button)findViewById(R.id.button1);
 					b.setText(result[3]);
-					b.invalidate();
+					but.invalidate();
 				}
 			}
 		}		
@@ -255,5 +259,11 @@ public class MainActivity extends Activity {
 				b2.invalidate();
 			}
 		}
+	}
+	
+	@Override
+	public void onPause() {
+		finish();
+		super.onPause();
 	}
 }

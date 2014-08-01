@@ -255,6 +255,8 @@ public class QuestionFinder {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			String[] nothing = {"none", "","",""};
+			return nothing;
 		}
 		
 		String sub = parseForBrackets(substring);
