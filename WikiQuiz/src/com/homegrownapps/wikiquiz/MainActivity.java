@@ -1,5 +1,7 @@
 package com.homegrownapps.wikiquiz;
 
+import java.util.Random;
+
 import wikiParse.QuestionCreator;
 import wikiParse.QuestionFinder;
 import wikiParse.WikiArticleRead;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -24,7 +27,7 @@ public class MainActivity extends Activity {
 	private ProgressDialog pdz;
 	private Context cont;
 	
-	private class wikiParse extends AsyncTask<Void, Void, String>{
+	private class wikiParse extends AsyncTask<Void, Void, String[]>{
 		
 		@Override
 		protected void onPreExecute() {
@@ -37,7 +40,7 @@ public class MainActivity extends Activity {
 		}
 		
 		@Override
-		protected String doInBackground(Void... params) {
+		protected String[] doInBackground(Void... params) {
 			// TODO Auto-generated method stub
 			WikiArticleRead reader = new WikiArticleRead();
 			String unparsed = reader.wikiDownload(Global.topic, "simple");
@@ -45,22 +48,43 @@ public class MainActivity extends Activity {
 				QuestionFinder qf = new QuestionFinder();
 				String[] parsed = qf.sentenceParse(unparsed);
 				String[] subobjverb = qf.questionParse(parsed, 1);
+				//possibly random numbers for question number argument in questionParse
 				QuestionCreator qc = new QuestionCreator();
 				String question = qc.questionMake(subobjverb[0], subobjverb[1], subobjverb[2]);
-				return question;
+				String[] qa = {question, subobjverb[3]};
+				return qa;
 			} else {
-				return "No articles about the topic";
+				String[] error = {"No articles about the topic", "none"};
+				return error;
 			}
 		}
 		
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String[] result) {
 			if (pdz != null) {
 				pdz.dismiss();
 			}
 			TextView tv = (TextView)findViewById(R.id.textView2);
-			tv.setText(result);
+			tv.setText(result[0]);
 			tv.invalidate();
+			Random r = new Random();
+			int randButton = r.nextInt(2);
+			//parse till punctuation mark
+			if (result[1] != "none"){
+				if (randButton == 0){
+					Button b = (Button)findViewById(R.id.button1);
+					b.setText(result[1]);
+					b.invalidate();
+				} else if (randButton == 1){
+					Button b = (Button)findViewById(R.id.button2);
+					b.setText(result[1]);
+					b.invalidate();
+				} else if (randButton == 2){
+					Button b = (Button)findViewById(R.id.button3);
+					b.setText(result[1]);
+					b.invalidate();
+				}
+			}
 		}		
 	}
 	
