@@ -33,7 +33,8 @@ public class MainActivity extends Activity {
 		public static String topic;
 		public static Context context;
 		public static int button;
-		public static int progress;
+		public static int progress = 1;
+		public static int question = 1;
 	}
 	
 	private ProgressDialog pdz;
@@ -64,12 +65,20 @@ public class MainActivity extends Activity {
 				parsed = parse.toArray(parsed);
 				//Random rand = new Random();
 				//int question_no = rand.nextInt(parsed.length-1)+1;
-				String[] subobjverb = qf.questionParse(parsed, 1);
+				String[] subobjverb = qf.questionParse(parsed, Global.progress);
+				String[] obj1 = qf.questionParse(parsed, Global.progress+1);
+				String[] obj2 = qf.questionParse(parsed, Global.progress+2);
+				while (obj1[3] == subobjverb[3] | obj2[3] == subobjverb[3]){
+					obj1 = qf.questionParse(parsed, Global.progress+2);
+					obj2 = qf.questionParse(parsed, Global.progress+3);
+				}
+				Global.progress = Global.progress + 3;
+				Global.question = Global.question + 1;
 				//possibly random numbers for question number argument in questionParse
 				//uncapitalise 'a' or 'an'
 				QuestionCreator qc = new QuestionCreator();
 				String question = qc.questionMake(subobjverb[0], subobjverb[1], subobjverb[2]);
-				String[] qa = {question, subobjverb[3]};
+				String[] qa = {question, subobjverb[3], obj1[3], obj2[3]};
 				return qa;
 			} else {
 				String[] error = {"No articles about the topic", "none"};
@@ -101,13 +110,31 @@ public class MainActivity extends Activity {
 					Button b = (Button)findViewById(R.id.button1);
 					b.setText(result[1]);
 					b.invalidate();
+					Button bu = (Button)findViewById(R.id.button2);
+					b.setText(result[2]);
+					b.invalidate();
+					Button but = (Button)findViewById(R.id.button3);
+					b.setText(result[3]);
+					b.invalidate();
 				} else if (randButton == 1){
 					Button b = (Button)findViewById(R.id.button2);
 					b.setText(result[1]);
 					b.invalidate();
+					Button bu = (Button)findViewById(R.id.button1);
+					b.setText(result[2]);
+					b.invalidate();
+					Button but = (Button)findViewById(R.id.button3);
+					b.setText(result[3]);
+					b.invalidate();
 				} else if (randButton == 2){
 					Button b = (Button)findViewById(R.id.button3);
 					b.setText(result[1]);
+					b.invalidate();
+					Button bu = (Button)findViewById(R.id.button2);
+					b.setText(result[2]);
+					b.invalidate();
+					Button but = (Button)findViewById(R.id.button1);
+					b.setText(result[3]);
 					b.invalidate();
 				}
 			}
