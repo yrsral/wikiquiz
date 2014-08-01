@@ -32,7 +32,7 @@ public class WikiArticleRead {
 	 * The use of this method is to make debugging easier for us, since we
 	 * only have the Android SDK on one computer: this can be changed between
 	 * logging for Android and printing without the Android SDK a lot easier
-	 * than renaming all the instances of Log.e or System.out.println.
+	 * than renaming all the instances of printError or System.out.println.
 	 *
 	 * @param	error	General error
 	 * @param	desc	Detailed description
@@ -40,13 +40,13 @@ public class WikiArticleRead {
 	 */
 	public void printError(String error, String desc) {
 		//System.out.println("Error: " + error + " - " + desc);
-		Log.e(error, desc);
+		printError(error, desc);
 	}
 
 	/**
 	 * Print some info.
 	 * <p>
-	 * See printError(). This maps to Log.i() rather than Log.e().
+	 * See printError(). This maps to printInfo() rather than printError().
 	 *
 	 * @param	info	Type of info
 	 * @param	desc	Actual info (string, note that things are working)
@@ -54,7 +54,7 @@ public class WikiArticleRead {
 	 */
 	public void printInfo(String info, String desc) {
 		//System.out.println("Info: " + info + " - " + desc);
-		Log.i(info, desc);
+		printInfo(info, desc);
 	}
 	
 	public JSONObject getJSONFromUrl(String url) {
@@ -90,20 +90,20 @@ public class WikiArticleRead {
 			}
 			is.close();
 			json = sb.toString();
-			Log.e("JSON", json);
+			printError("JSON", json);
 		} catch (Exception e) {
-			Log.e("Buffer Error", "Error converting result " + e.toString());
+			printError("Buffer Error", "Error converting result " + e.toString());
 		}
  
 		// try parse the string to a JSON object
 		try {
 			jObj = new JSONObject(json);			
 		} catch (JSONException e) {
-			Log.e("JSON Parser", "Error parsing data " + e.toString());
+			printError("JSON Parser", "Error parsing data " + e.toString());
 		}
  
 		// return JSON String
-		Log.i("Tag", jObj.toString());
+		printInfo("Tag", jObj.toString());
 		return jObj;
  
 	}
