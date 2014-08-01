@@ -12,7 +12,8 @@ public class QuestionCreator {
     Realiser realiser = new Realiser(lexicon);
     
 	public String questionMake(String subject, String verb, String tense){
-		//make the sentence
+        // note that we don't have the object -- we don't use that in the
+        // question
 		SPhraseSpec p = nlgFactory.createClause();
 		p.setVerb(verb);
 		p.setSubject(subject);
@@ -23,10 +24,12 @@ public class QuestionCreator {
 		} else if (tense == "future"){
 			p.setFeature(Feature.TENSE, Tense.FUTURE);
 		}
-		//eg. what WERE the vikings
+        // INTERROGATIVE_TYPE = question
+        // WHAT_OBJECT = asking "What ...?"
+        // TODO: if proper noun, ask who
+        // TODO: if date, ask when
 		p.setFeature(Feature.INTERROGATIVE_TYPE, InterrogativeType.WHAT_OBJECT);
 		String output = realiser.realiseSentence(p);
-		//return the sentence
 		return output;
 		
 	}

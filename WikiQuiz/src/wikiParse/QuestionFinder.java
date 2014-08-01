@@ -32,7 +32,7 @@ public class QuestionFinder {
 		article_new = null;
 		//.toLowerCase();
 		while (true){
-		//removing [[File: for representing photos
+		// [[File: indicates an image, which we don't want
 		if (article_newer.indexOf("[[File") != -1){
 			int photoindex = article_newer.indexOf("[[File");
 			int photoend = article_newer.indexOf("]]", photoindex);
@@ -198,6 +198,7 @@ public class QuestionFinder {
 	public String[] questionParse(String[] article, int question){
 		int x = 0;
 		int i = 0;
+		String apiKey = "aec6c18db45c37f30dccd808020f969731a4421c";
 		//while (x != question){
 		//	if (x != 0){
 		//		i = i+1;
@@ -209,11 +210,10 @@ public class QuestionFinder {
 		
 		String sentence_noquotes = article[question-1].replaceAll("'''", "");
 		
-		//aec6c18db45c37f30dccd808020f969731a4421c
 		//urlencode(query, "utf-8")
 		JSONObject subobj = null;
 		try {
-			subobj = getJSONFromUrl("http://access.alchemyapi.com/calls/text/TextGetRelations?text="+URLEncoder.encode(sentence_noquotes, "UTF-8")+"&apikey=aec6c18db45c37f30dccd808020f969731a4421c&entities=1&keywords=1&outputMode=json");
+			subobj = getJSONFromUrl("http://access.alchemyapi.com/calls/text/TextGetRelations?text="+URLEncoder.encode(sentence_noquotes, "UTF-8")+"&apikey="+apiKey"+&entities=1&keywords=1&outputMode=json");
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -298,6 +298,7 @@ public class QuestionFinder {
 				int photoend = sentence.indexOf(")", photoindex);
 				int str_len = sentence.length()-1;
 				sentenceUpdated = sentence.substring(0, photoindex)+sentence.substring(photoend+1);
+                // TODO: this variable mangling is confusing and messy
 				sentence = sentenceUpdated;
 				//article_newer = article_updated;
 				
