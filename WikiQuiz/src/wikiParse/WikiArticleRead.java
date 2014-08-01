@@ -59,10 +59,9 @@ public class WikiArticleRead {
 	
 	public JSONObject getJSONFromUrl(String url) {
 		 
-		// Making HTTP get request
+		// make HTTP get request
 		HttpEntity httpEntity;
 		try {
-			// defaultHttpClient
 			DefaultHttpClient httpClient = new DefaultHttpClient();
 			HttpGet httpGet = new HttpGet(url);
  
@@ -79,7 +78,7 @@ public class WikiArticleRead {
 		}
  
 		try {
-			//parsing to string
+			// parse to string
 			//String json = IOUtils.toString(is, "iso-8859-1");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					is, "iso-8859-1"), 8);
@@ -129,12 +128,15 @@ public class WikiArticleRead {
 			if (keys.hasNext() == true){
 				key = keys.next();
 			}
+            // check if the page is a redirect (only contains '#REDIRECT page')
 			redircheck = (page.getJSONObject(key)).getJSONArray("revisions").getJSONObject(0).getString("*");
 			if (redircheck.contains("#REDIRECT")){
+                // get the linked page
 				int startOfBrackets = redircheck.indexOf("[[")+2;
 				int endOfBrackets = redircheck.indexOf("]]");
 				String redirect = redircheck.substring(startOfBrackets, endOfBrackets);
-				article = wikiDownload(redirect, true);
+                // run again with the redirected-to page
+				article = wikiDownload(redirect, lang);
 			} else {
 				article = redircheck;
 			}
