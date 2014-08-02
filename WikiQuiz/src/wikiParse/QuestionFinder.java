@@ -207,8 +207,18 @@ public class QuestionFinder {
 		//		x = x+1;
 		//	}
 		//}
-		
-		String sentence_noquotes = article[question-1].replaceAll("'''", "");
+		String sentence_noquotes;
+		try {
+		sentence_noquotes = article[question-1].replaceAll("'''", "");
+		} catch (ArrayIndexOutOfBoundsException e){
+			e.printStackTrace();
+			try {
+			sentence_noquotes = article[question-2].replaceAll("'''", "");
+			}  catch (ArrayIndexOutOfBoundsException en){
+				String[] nothing = {"none", "","",""};
+				return nothing;
+			}
+		}
 		
 		//urlencode(query, "utf-8")
 		JSONObject subobj = null;

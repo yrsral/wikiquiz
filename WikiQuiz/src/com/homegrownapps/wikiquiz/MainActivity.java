@@ -173,6 +173,8 @@ public class MainActivity extends Activity {
 		cont = MainActivity.this;
 		Global.context = cont;
 		Global.question = 1;
+		Global.score = 0;
+		Global.progress = 1;
 		setContentView(R.layout.activity_main);
 		Intent intent = getIntent();
 		Global.topic = intent.getStringExtra(TextActivity.EXTRA_MESSAGE);
@@ -204,13 +206,14 @@ public class MainActivity extends Activity {
 		} else if (button == 3){
 			id = R.id.button3;
 		}
-		if (Global.button == button){
+		if (Global.button == button-1){
 			Button b0 = (Button)findViewById(id);
 			b0.setBackgroundColor(Color.GREEN);
-			Global.score = Global.score + 1;
 			b0.invalidate();
+			Global.score = Global.score + 1;
 			TextView tv = (TextView)findViewById(R.id.textView3);
 			tv.setText("Score: "+Integer.toString(Global.score));
+			//log tags for score (diagnostics)
 			tv.invalidate();
 		} else {
 			Button b_origin = (Button)findViewById(id);
@@ -258,11 +261,5 @@ public class MainActivity extends Activity {
 	
 	public void onClickC(View v){
 		buttonClick(3);
-	}
-	
-	@Override
-	public void onPause() {
-		finish();
-		super.onPause();
 	}
 }
