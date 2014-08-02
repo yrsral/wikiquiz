@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Button;
@@ -35,6 +36,7 @@ public class MainActivity extends Activity {
 		public static int button;
 		public static int progress = 1;
 		public static int question = 1;
+		public static int score;
 	}
 	
 	private ProgressDialog pdz;
@@ -50,6 +52,7 @@ public class MainActivity extends Activity {
 			pdz.setCancelable(false);
 			pdz.setIndeterminate(true);
 			pdz.show();
+			Global.score = 0;
 		}
 		
 		@Override
@@ -85,7 +88,7 @@ public class MainActivity extends Activity {
 				String[] qa = {question, subobjverb[3], obj1[3], obj2[3]};
 				return qa;
 			} else {
-				String[] error = {"No questions can be made about the topic", "none"};
+				String[] error = {"No questions can be made. Try again later", "none"};
 				return error;
 			}
 		}
@@ -115,32 +118,48 @@ public class MainActivity extends Activity {
 					b.setText(result[1]);
 					b.invalidate();
 					Button bu = (Button)findViewById(R.id.button2);
-					b.setText(result[2]);
+					bu.setText(result[2]);
 					bu.invalidate();
 					Button but = (Button)findViewById(R.id.button3);
-					b.setText(result[3]);
+					but.setText(result[3]);
 					but.invalidate();
 				} else if (randButton == 1){
 					Button b = (Button)findViewById(R.id.button2);
 					b.setText(result[1]);
 					b.invalidate();
 					Button bu = (Button)findViewById(R.id.button1);
-					b.setText(result[2]);
+					bu.setText(result[2]);
 					bu.invalidate();
 					Button but = (Button)findViewById(R.id.button3);
-					b.setText(result[3]);
+					but.setText(result[3]);
 					but.invalidate();
 				} else if (randButton == 2){
 					Button b = (Button)findViewById(R.id.button3);
 					b.setText(result[1]);
 					b.invalidate();
 					Button bu = (Button)findViewById(R.id.button2);
-					b.setText(result[2]);
+					bu.setText(result[2]);
 					bu.invalidate();
 					Button but = (Button)findViewById(R.id.button1);
-					b.setText(result[3]);
+					but.setText(result[3]);
 					but.invalidate();
 				}
+			if (Global.question < 10){
+				Button playagain = new Button(cont);
+				playagain.setText("Next Question");
+				LayoutParams para = new LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+				para.addRule(RelativeLayout.BELOW, R.id.button3);
+				playagain.setLayoutParams(para);
+				playagain.setOnClickListener(new OnClickListener() {
+			        @Override
+			        public void onClick(View btn) {
+			            wikiParse wp = new wikiParse();
+			            wp.execute();
+			        }
+			    });
+			} else {
+				//score display?
+			}
 			}
 		}		
 	}
@@ -172,7 +191,11 @@ public class MainActivity extends Activity {
 		if (Global.button == 0){
 			Button b0 = (Button)findViewById(R.id.button1);
 			b0.setBackgroundColor(Color.GREEN);
+			Global.score = Global.score + 1;
 			b0.invalidate();
+			TextView tv = (TextView)findViewById(R.id.textView3);
+			tv.setText("Score: "+Integer.toString(Global.score));
+			tv.invalidate();
 		} else {
 			Button b_origin = (Button)findViewById(R.id.button1);
 			b_origin.setBackgroundColor(Color.GREEN);
@@ -206,7 +229,11 @@ public class MainActivity extends Activity {
 		if (Global.button == 1){
 			Button b1 = (Button)findViewById(R.id.button2);
 			b1.setBackgroundColor(Color.GREEN);
+			Global.score = Global.score + 1;
 			b1.invalidate();
+			TextView tv = (TextView)findViewById(R.id.textView3);
+			tv.setText("Score: "+Integer.toString(Global.score));
+			tv.invalidate();
 		} else {
 			Button b_origin = (Button)findViewById(R.id.button2);
 			b_origin.setBackgroundColor(Color.RED);
@@ -240,7 +267,11 @@ public class MainActivity extends Activity {
 		if (Global.button == 2){
 			Button b2 = (Button)findViewById(R.id.button3);
 			b2.setBackgroundColor(Color.GREEN);
+			Global.score = Global.score + 1;
 			b2.invalidate();
+			TextView tv = (TextView)findViewById(R.id.textView3);
+			tv.setText("Score: "+Integer.toString(Global.score));
+			tv.invalidate();
 		}else {
 			Button b_origin = (Button)findViewById(R.id.button3);
 			b_origin.setBackgroundColor(Color.RED);
