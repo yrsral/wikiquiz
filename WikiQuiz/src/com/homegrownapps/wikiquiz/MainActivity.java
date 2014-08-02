@@ -78,7 +78,8 @@ public class MainActivity extends Activity {
 				Global.progress = Global.progress + 3;
 				Global.question = Global.question + 1;
 				//possibly random numbers for question number argument in questionParse
-				//uncapitalise 'a' or 'an'
+				// TODO: uncapitalise 'a', 'an' and 'the' (better for
+                //       everything except The Beatles)
 				if (subobjverb[0] == "none"){
 					String[] error = {"No questions can be made about the topic", "none"};
 					return error;
