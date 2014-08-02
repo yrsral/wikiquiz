@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 // TODO: Parse for wikt:| in used links
+//implement string length when looking at questions
 
 public class MainActivity extends Activity {
 	
@@ -53,6 +54,23 @@ public class MainActivity extends Activity {
 			pdz.setIndeterminate(true);
 			pdz.show();
 			Global.score = 0;
+			if (Global.question != 1){
+				Button b = (Button)findViewById(R.id.button1);
+				b.setBackgroundResource(android.R.drawable.btn_default);
+				b.setEnabled(true);
+				b.invalidate();
+				Button bu = (Button)findViewById(R.id.button2);
+				bu.setBackgroundResource(android.R.drawable.btn_default);
+				bu.setEnabled(true);
+				bu.invalidate();
+				Button but = (Button)findViewById(R.id.button3);
+				but.setBackgroundResource(android.R.drawable.btn_default);
+				but.setEnabled(true);
+				but.invalidate();
+				Button pa = (Button)findViewById(987);
+				pa.setVisibility(View.GONE);
+				pa.invalidate();
+			}
 		}
 		
 		@Override
@@ -63,9 +81,9 @@ public class MainActivity extends Activity {
 			if (unparsed != "none"){
 				QuestionFinder qf = new QuestionFinder();
 				String[] parsed = qf.sentenceParse(unparsed);
-				List<String> parse = Arrays.asList(parsed);
-				Collections.shuffle(parse);
-				parsed = parse.toArray(parsed);
+				//List<String> parse = Arrays.asList(parsed);
+				//Collections.shuffle(parse);
+				//parsed = parse.toArray(parsed);
 				//Random rand = new Random();
 				//int question_no = rand.nextInt(parsed.length-1)+1;
 				String[] subobjverb = qf.questionParse(parsed, Global.progress);
@@ -144,22 +162,6 @@ public class MainActivity extends Activity {
 					but.setText(result[3]);
 					but.invalidate();
 				}
-			if (Global.question < 10){
-				Button playagain = new Button(cont);
-				playagain.setText("Next Question");
-				LayoutParams para = new LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-				para.addRule(RelativeLayout.BELOW, R.id.button3);
-				playagain.setLayoutParams(para);
-				playagain.setOnClickListener(new OnClickListener() {
-			        @Override
-			        public void onClick(View btn) {
-			            wikiParse wp = new wikiParse();
-			            wp.execute();
-			        }
-			    });
-			} else {
-				//score display?
-			}
 			}
 		}		
 	}
@@ -169,6 +171,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		cont = MainActivity.this;
 		Global.context = cont;
+		Global.question = 1;
 		setContentView(R.layout.activity_main);
 		Intent intent = getIntent();
 		Global.topic = intent.getStringExtra(TextActivity.EXTRA_MESSAGE);
@@ -176,9 +179,13 @@ public class MainActivity extends Activity {
 		wp.execute();
 	}
 	
-	// get ticks and crosses
+	// change button colours when clicked (right/wrong)
 	
 	public void onClickA(View v){
+		buttonClick(1);
+	}
+
+	public void buttonClick(int button) {
 		Button a = (Button)findViewById(R.id.button1);
 		Button b = (Button)findViewById(R.id.button2);
 		Button c = (Button)findViewById(R.id.button3);
@@ -188,8 +195,16 @@ public class MainActivity extends Activity {
 		b.invalidate();
 		c.setEnabled(false);
 		c.invalidate();
-		if (Global.button == 0){
-			Button b0 = (Button)findViewById(R.id.button1);
+		int id = 0;
+		if (button == 1){
+			id = R.id.button1;
+		} else if(button == 2){
+			id = R.id.button2;
+		} else if (button == 3){
+			id = R.id.button3;
+		}
+		if (Global.button == button){
+			Button b0 = (Button)findViewById(id);
 			b0.setBackgroundColor(Color.GREEN);
 			Global.score = Global.score + 1;
 			b0.invalidate();
@@ -197,8 +212,8 @@ public class MainActivity extends Activity {
 			tv.setText("Score: "+Integer.toString(Global.score));
 			tv.invalidate();
 		} else {
-			Button b_origin = (Button)findViewById(R.id.button1);
-			b_origin.setBackgroundColor(Color.GREEN);
+			Button b_origin = (Button)findViewById(id);
+			b_origin.setBackgroundColor(Color.RED);
 			b_origin.invalidate();
 			if (Global.button == 0){
 				Button b0 = (Button)findViewById(R.id.button1);
@@ -213,83 +228,35 @@ public class MainActivity extends Activity {
 				b2.setBackgroundColor(Color.GREEN);
 				b2.invalidate();
 			}
+		}
+		if (Global.question < 10){
+			Button playagain = new Button(cont);
+			playagain.setText("Next Question");
+			LayoutParams para = new LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+			para.addRule(RelativeLayout.BELOW, R.id.button3);
+			playagain.setLayoutParams(para);
+			playagain.setOnClickListener(new OnClickListener() {
+		        @Override
+		        public void onClick(View btn) {
+		            wikiParse wp = new wikiParse();
+		            wp.execute();
+		        }
+		    });
+			RelativeLayout rel = (RelativeLayout)findViewById(R.id.layout1);
+			rel.addView(playagain, para);
+			playagain.setId(987);
+			playagain.invalidate();
+		} else {
+			//score display?
 		}
 	}
 	
 	public void onClickB(View v){
-		Button a = (Button)findViewById(R.id.button1);
-		Button b = (Button)findViewById(R.id.button2);
-		Button c = (Button)findViewById(R.id.button3);
-		a.setEnabled(false);
-		a.invalidate();
-		b.setEnabled(false);
-		b.invalidate();
-		c.setEnabled(false);
-		c.invalidate();
-		if (Global.button == 1){
-			Button b1 = (Button)findViewById(R.id.button2);
-			b1.setBackgroundColor(Color.GREEN);
-			Global.score = Global.score + 1;
-			b1.invalidate();
-			TextView tv = (TextView)findViewById(R.id.textView3);
-			tv.setText("Score: "+Integer.toString(Global.score));
-			tv.invalidate();
-		} else {
-			Button b_origin = (Button)findViewById(R.id.button2);
-			b_origin.setBackgroundColor(Color.RED);
-			b_origin.invalidate();
-			if (Global.button == 0){
-				Button b0 = (Button)findViewById(R.id.button1);
-				b0.setBackgroundColor(Color.GREEN);
-				b0.invalidate();
-			} else if (Global.button == 1) {
-				Button b1 = (Button)findViewById(R.id.button2);
-				b1.setBackgroundColor(Color.GREEN);
-				b1.invalidate();
-			} else{
-				Button b2 = (Button)findViewById(R.id.button3);
-				b2.setBackgroundColor(Color.GREEN);
-				b2.invalidate();
-			}
-		}
+		buttonClick(2);
 	}
 	
 	public void onClickC(View v){
-		Button a = (Button)findViewById(R.id.button1);
-		Button b = (Button)findViewById(R.id.button2);
-		Button c = (Button)findViewById(R.id.button3);
-		a.setEnabled(false);
-		a.invalidate();
-		b.setEnabled(false);
-		b.invalidate();
-		c.setEnabled(false);
-		c.invalidate();
-		if (Global.button == 2){
-			Button b2 = (Button)findViewById(R.id.button3);
-			b2.setBackgroundColor(Color.GREEN);
-			Global.score = Global.score + 1;
-			b2.invalidate();
-			TextView tv = (TextView)findViewById(R.id.textView3);
-			tv.setText("Score: "+Integer.toString(Global.score));
-			tv.invalidate();
-		}else {
-			Button b_origin = (Button)findViewById(R.id.button3);
-			b_origin.setBackgroundColor(Color.RED);
-			b_origin.invalidate();
-			if (Global.button == 0){
-				Button b0 = (Button)findViewById(R.id.button1);
-				b0.setBackgroundColor(Color.GREEN);
-				b0.invalidate();
-			} else if (Global.button == 1) {
-				Button b1 = (Button)findViewById(R.id.button2);
-				b1.setBackgroundColor(Color.GREEN);
-				b1.invalidate();
-			} else{
-				Button b2 = (Button)findViewById(R.id.button3);
-				b2.setBackgroundColor(Color.GREEN);
-				b2.invalidate();
-			}
-		}
+		buttonClick(3);
 	}
 	
 	@Override
