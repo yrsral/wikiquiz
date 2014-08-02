@@ -60,7 +60,12 @@ public class QuestionFinder {
 					photoend = article_newer.indexOf(">");
 					int str_len = article_newer.length()-1;
 				}
+				try {
 				article_newer.delete(photoindex, photoend+6);
+				} catch (java.lang.StringIndexOutOfBoundsException e){
+					e.printStackTrace();
+					break;
+				}
 				
 				
 			} else {

@@ -21,8 +21,9 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/button1"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_centerVertical="false"
         android:onClick="onClickB"
         android:text="Answer B"
         android:textColor="#FFFFFF" />
@@ -31,7 +32,7 @@
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button2"
+        android:layout_below="@id/button2"
         android:layout_centerHorizontal="true"
         android:onClick="onClickC"
         android:text="Answer C"
@@ -41,7 +42,7 @@
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button2"
+        android:layout_below="@id/textView2"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
@@ -53,8 +54,9 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button1"
+        android:layout_below="@id/textView1"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:text="Question"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#FFFFFF" />
@@ -65,6 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/textView1"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:scaleType="centerInside"
         android:src="@drawable/ic_launcher" />
 

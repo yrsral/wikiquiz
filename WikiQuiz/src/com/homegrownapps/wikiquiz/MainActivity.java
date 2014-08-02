@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,7 +54,6 @@ public class MainActivity extends Activity {
 			pdz.setCancelable(false);
 			pdz.setIndeterminate(true);
 			pdz.show();
-			Global.score = 0;
 			if (Global.question != 1){
 				Button b = (Button)findViewById(R.id.button1);
 				b.setBackgroundResource(android.R.drawable.btn_default);
@@ -210,7 +210,9 @@ public class MainActivity extends Activity {
 			Button b0 = (Button)findViewById(id);
 			b0.setBackgroundColor(Color.GREEN);
 			b0.invalidate();
-			Global.score = Global.score + 1;
+			Log.i("Score", Integer.toString(Global.score));
+			Global.score = Global.score+1;
+			Log.i("Score", Integer.toString(Global.score));
 			TextView tv = (TextView)findViewById(R.id.textView3);
 			tv.setText("Score: "+Integer.toString(Global.score));
 			//log tags for score (diagnostics)
@@ -253,6 +255,12 @@ public class MainActivity extends Activity {
 		} else {
 			//score display?
 		}
+	}
+	
+	@Override
+	public void onPause(){
+		finish();
+		super.onPause();
 	}
 	
 	public void onClickB(View v){
